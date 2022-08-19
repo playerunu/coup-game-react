@@ -7,7 +7,11 @@ export const WsConnectionContext = React.createContext<
   WsConnection | undefined
 >(undefined);
 
-export const WsConnectionProvider: React.FC = ({ children }) => {
+type WsConnectionProviderProps = {
+  children: React.ReactNode;
+}
+
+export const WsConnectionProvider: React.FC<WsConnectionProviderProps> = ({ children }) => {
   const dispatch = useDispatch();
   const [webSocket, setWebSocket] = useState<WebSocket>();
   const [wsConnection, setWsConnection] = useState<WsConnection>();

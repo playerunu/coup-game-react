@@ -6,7 +6,11 @@ const ImageContext = React.createContext({
   webpSupported: false,
 });
 
-export const ImageProvider: React.FC = ({ children }) => {
+type ImageProviderProps = {
+  children: React.ReactNode;
+}
+
+export const ImageProvider: React.FC<ImageProviderProps> = ({ children }) => {
   const [isSupported, setIsSupported] = useState<boolean>(false);
 
   useEffect(() => {

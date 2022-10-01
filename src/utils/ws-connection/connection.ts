@@ -1,17 +1,36 @@
-import { WEB_SOCKET_URL } from "./constants";
+import { WEB_SOCKET_URL } from './constants';
 
-const socket = new WebSocket(WEB_SOCKET_URL);
+class WsConnection {
+  private socket: WebSocket;
+  get webSocket() {
+    return this.socket;
+  }
 
-export const wsConnection = {
-  sendMessage: (data: any) => {
-    socket.send(JSON.stringify(data));
-  },
+  private webSocketConnected: Promise<void>;
 
-  addListener: (listener: any) => {
-    socket.addEventListener("message", listener);
-  },
+  constructor() {
+    this.socket = new WebSocket(WEB_SOCKET_URL);
+    this.webSocketConnected = new Promise<void>((resolve) => {
+      this.socket.addEventListener('open', () => {
+        resolve();
+      });
+    });
+  }
 
-  removeListener: (listener: any) => {
-    socket.removeEventListener("message", listener);
-  },
-};
+  async sendMessage(data: any) {
+    await this.webSocketConnected;
+    this.socket.send(JSON.stringify(data));
+  }
+
+  async addListener(listener: any) {
+    await this.webSocketConnected;
+    this.socket.addEventListener('message', listener);
+  }
+
+  async removeListener(listener: any) {
+    await this.webSocketConnected;
+    this.socket.removeEventListener('message', listener);
+  }
+}
+
+export const wsConnection = new WsConnection();

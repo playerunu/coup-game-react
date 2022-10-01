@@ -1,12 +1,21 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import {
+  configureStore,
+  ThunkAction,
+  Action,
+  combineReducers,
+} from '@reduxjs/toolkit';
+import { wsApi } from './game/api';
 import { gameReducer } from './game/slice';
 
+const appReducer = combineReducers({
+  [wsApi.reducerPath]: wsApi.reducer,
+  game: gameReducer,
+});
+
 export const store = configureStore({
-  reducer: {
-    game: gameReducer,
-  },
+  reducer: appReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware(),
+    getDefaultMiddleware().concat(wsApi.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;

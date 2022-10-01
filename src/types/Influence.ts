@@ -9,3 +9,7 @@ export enum Influence {
 export const influenceToStr = (influence: Influence): string => {
   return Influence[influence].toLowerCase();
 };
+
+export const influenceToImgSrc = (influence: Influence): string => {
+  return `${influenceToStr(influence)}.png`;
+};

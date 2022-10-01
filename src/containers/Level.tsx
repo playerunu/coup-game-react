@@ -1,29 +1,36 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { GameTable } from 'components/GameTable';
 import { GameMessage } from 'types/GameMessage';
-import { WsConnectionContext } from 'utils/ws-connection/provider';
 import {
   adjectives,
   animals,
   colors,
   uniqueNamesGenerator,
 } from 'unique-names-generator';
+import { useSendMessageMutation, useWsListenerQuery } from 'redux/game/api';
+import { setHeroPlayerName } from 'redux/game/slice';
+import { useAppDispatch } from 'redux/hooks';
 
 export const Level: React.FC = () => {
-  const wsConnection = useContext(WsConnectionContext);
+  const dispatch = useAppDispatch();
+
+  const [sendMessage] = useSendMessageMutation();
+  useWsListenerQuery();
 
   useEffect(() => {
-    if (!!wsConnection) {
-      wsConnection.sendMessage({
-        messageType: GameMessage[GameMessage.PlayerJoined],
-        data: {
-          name: uniqueNamesGenerator({
-            dictionaries: [adjectives, colors, animals],
-          }),
-        },
-      });
-    }
-  }, [wsConnection]);
+    const heroPlayerName = uniqueNamesGenerator({
+      dictionaries: [adjectives, colors, animals],
+    });
+
+    sendMessage({
+      messageType: GameMessage[GameMessage.PlayerJoined],
+      data: {
+        name: heroPlayerName,
+      },
+    });
+
+    dispatch(setHeroPlayerName(heroPlayerName));
+  }, [dispatch, sendMessage]);
 
   return <GameTable />;
 };

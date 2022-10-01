@@ -92,6 +92,10 @@ export const selectPlayers = (state: RootState) => {
   return state.game.players;
 };
 
+export const selectTableCoins = (state: RootState) => {
+  return state.game.tableCoins;
+};
+
 export const { setHeroPlayerName, updateStateFromWsMessage } =
   gameSlice.actions;
 

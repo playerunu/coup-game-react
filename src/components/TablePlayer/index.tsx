@@ -46,25 +46,23 @@ export const TablePlayer: React.FC<TablePlayerProps> = ({ player }) => {
   };
 
   return (
-    <>
-      <Box>
-        <Box display="flex" alignItems="center">
-          <img src={card1Img} key={'card1Img'} alt={card1Img} />
-          <img src={card2Img} key={'card2Img'} alt={card2Img} />
-        </Box>
-        {player.name}
-        {!!player.coins && (
-          <Box display="flex" flexDirection="row">
-            {/* Render groups of two coins */}
-            {[...Array(Math.floor(player.coins / 2))].map((index) =>
-              renderTwoCoinsGroup(true, index)
-            )}
-
-            {/* Render the last coin if the coins number is odd */}
-            {player.coins % 2 !== 0 && renderTwoCoinsGroup(false)}
-          </Box>
-        )}
+    <Box>
+      <Box display="flex" alignItems="center">
+        <img src={card1Img} key={'card1Img'} alt={card1Img} />
+        <img src={card2Img} key={'card2Img'} alt={card2Img} />
       </Box>
-    </>
+      {player.name}
+      {!!player.coins && (
+        <Box display="flex" flexDirection="row">
+          {/* Render groups of two coins */}
+          {[...Array(Math.floor(player.coins / 2))].map((index) =>
+            renderTwoCoinsGroup(true, index)
+          )}
+
+          {/* Render the last coin if the coins number is odd */}
+          {player.coins % 2 !== 0 && renderTwoCoinsGroup(false)}
+        </Box>
+      )}
+    </Box>
   );
 };

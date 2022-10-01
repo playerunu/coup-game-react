@@ -3,9 +3,14 @@ import { Box } from '@mui/material';
 //import useScreenOrientation from "hooks/useScreenOrientation";
 import useWindowSize from 'hooks/useWindowSize';
 import { useAppSelector } from 'redux/hooks';
-import { selectHeroPlayerName, selectPlayers } from 'redux/game/slice';
+import {
+  selectHeroPlayerName,
+  selectPlayers,
+  selectTableCoins,
+} from 'redux/game/slice';
 import { Player } from 'types/Player';
 import { TablePlayer } from 'components/TablePlayer';
+import { TableCoins } from 'components/TableCoins';
 
 export const GameTable: React.FC = () => {
   //const screenOrientation = useScreenOrientation();
@@ -17,6 +22,7 @@ export const GameTable: React.FC = () => {
 
   const players = useAppSelector(selectPlayers);
   const heroPlayerName = useAppSelector(selectHeroPlayerName);
+  const tableCoins = useAppSelector(selectTableCoins);
 
   const [tablePlayers, setTablePlayers] = useState<Player[]>([]);
   const [heroPlayer, setHeroPlayer] = useState<Player | undefined>(undefined);
@@ -57,17 +63,16 @@ export const GameTable: React.FC = () => {
         width="100vw"
         flexDirection="column"
       >
-        {tablePlayers.length >= 4 && (
-          <Box
-            display="flex"
-            flex={0.2}
-            flexDirection="row"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <TablePlayer player={tablePlayers[3]} />
-          </Box>
-        )}
+        <Box
+          display="flex"
+          flex={0.2}
+          flexDirection="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          {/* 4TH PLAYER */}
+          {tablePlayers.length >= 4 && <TablePlayer player={tablePlayers[3]} />}
+        </Box>
 
         <Box
           display="flex"
@@ -75,36 +80,45 @@ export const GameTable: React.FC = () => {
           justifyContent="space-between"
           alignItems="center"
         >
-          {tablePlayers.length >= 2 && (
-            <Box
-              display="flex"
-              alignItems="center"
-              flexDirection="column"
-              justifyContent="space-between"
-              height="100%"
-            >
-              {tablePlayers.length >= 3 && (
-                <TablePlayer player={tablePlayers[2]} />
-              )}
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            rowGap={'10px'}
+            height="100%"
+          >
+            {/* 3RD PLAYER */}
+            {tablePlayers.length >= 3 && (
+              <TablePlayer player={tablePlayers[2]} />
+            )}
 
+            {/* 2ND PLAYER */}
+            {tablePlayers.length >= 2 && (
               <TablePlayer player={tablePlayers[1]} />
-            </Box>
-          )}
-          {tablePlayers.length >= 5 && (
-            <Box
-              display="flex"
-              alignItems="center"
-              flexDirection="column"
-              justifyContent="space-between"
-              height="100%"
-            >
-              {tablePlayers.length === 6 && (
-                <TablePlayer player={tablePlayers[5]} />
-              )}
+            )}
+          </Box>
 
+          <Box height="100%">
+            <TableCoins coins={tableCoins} />
+          </Box>
+          
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            rowGap={'10px'}
+            height="100%"
+          >
+            {/* 6TH PLAYER */}
+            {tablePlayers.length === 6 && (
+              <TablePlayer player={tablePlayers[5]} />
+            )}
+
+            {/* 5TH PLAYER */}
+            {tablePlayers.length >= 5 && (
               <TablePlayer player={tablePlayers[4]} />
-            </Box>
-          )}
+            )}
+          </Box>
         </Box>
 
         <Box
@@ -114,6 +128,7 @@ export const GameTable: React.FC = () => {
           justifyContent="center"
           alignItems="center"
         >
+          {/* 1ST PLAYER, ALWAYS THE HERO PLAYER*/}
           {heroPlayer && <TablePlayer player={heroPlayer} />}
         </Box>
       </Box>

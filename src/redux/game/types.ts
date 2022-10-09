@@ -10,6 +10,7 @@ export type GameState = {
   currentPlayer: Player;
   currentMove?: PlayerMove;
   tableCoins: number;
+  gameStarted: boolean;
 };
 
 export type WsMessage = {

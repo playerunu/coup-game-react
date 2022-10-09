@@ -8,11 +8,19 @@ import {
   uniqueNamesGenerator,
 } from 'unique-names-generator';
 import { useSendMessageMutation, useWsListenerQuery } from 'redux/game/api';
-import { setHeroPlayerName } from 'redux/game/slice';
-import { useAppDispatch } from 'redux/hooks';
+import {
+  selectGameStarted,
+  selectHeroPlayerName,
+  setHeroPlayerName,
+} from 'redux/game/slice';
+import { useAppDispatch, useAppSelector } from 'redux/hooks';
+import { Typography } from '@mui/material';
 
 export const Level: React.FC = () => {
   const dispatch = useAppDispatch();
+
+  const gameStarted = useAppSelector(selectGameStarted);
+  const heroPlayerName = useAppSelector(selectHeroPlayerName);
 
   const [sendMessage] = useSendMessageMutation();
   useWsListenerQuery();
@@ -32,5 +40,12 @@ export const Level: React.FC = () => {
     dispatch(setHeroPlayerName(heroPlayerName));
   }, [dispatch, sendMessage]);
 
-  return <GameTable />;
+  return gameStarted ? (
+    <GameTable />
+  ) : (
+    <>
+      <Typography variant="h3"> Welcome {heroPlayerName}!</Typography>
+      <Typography variant="h4"> Waiting for game to start...</Typography>
+    </>
+  );
 };

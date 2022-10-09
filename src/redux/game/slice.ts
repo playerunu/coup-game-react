@@ -13,6 +13,7 @@ const initialGameState: GameState = {
   currentPlayer: {},
   currentMove: undefined,
   tableCoins: 0,
+  gameStarted: false,
 };
 
 export const gameSlice = createSlice({
@@ -46,7 +47,7 @@ export const gameSlice = createSlice({
           state.players = [...state.players, newHeroPlayer];
         }
       } else {
-        const newPlayersArray = [];
+        const newPlayersArray: Player[] = [];
         if (!!message.players) {
           for (let player of message.players) {
             const gamePlayer = state.players.find(
@@ -78,6 +79,9 @@ export const gameSlice = createSlice({
           ...(!!message.currentMove && { currentMove: message.currentMove }),
           ...(!!message.tableCoins && { tableCoins: message.tableCoins }),
           ...(!!message.players && { players: [...newPlayersArray] }),
+          ...(messageType === GameMessage[GameMessage.GameStarted] && {
+            gameStarted: true,
+          }),
         };
       }
     },
@@ -94,6 +98,14 @@ export const selectPlayers = (state: RootState) => {
 
 export const selectTableCoins = (state: RootState) => {
   return state.game.tableCoins;
+};
+
+export const selectGameStarted = (state: RootState) => {
+  return state.game.gameStarted;
+};
+
+export const selectIsHeroPlayerTurn = (state: RootState) => {
+  return state.game.currentPlayer?.name === state.game.heroPlayerName;
 };
 
 export const { setHeroPlayerName, updateStateFromWsMessage } =

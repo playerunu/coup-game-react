@@ -3,6 +3,11 @@ import { Box } from '@mui/material';
 import { useWebpImage } from 'utils/image';
 import { Player } from 'types/Player';
 import { influenceToImgSrc } from 'types/Influence';
+import styled from 'styled-components';
+
+const CardImg = styled.img`
+  border-radius: 4px;
+`;
 
 export type TablePlayerProps = {
   player: Player;
@@ -48,8 +53,8 @@ export const TablePlayer: React.FC<TablePlayerProps> = ({ player }) => {
   return (
     <Box>
       <Box display="flex" alignItems="center">
-        <img src={card1Img} key={'card1Img'} alt={card1Img} />
-        <img src={card2Img} key={'card2Img'} alt={card2Img} />
+        <CardImg src={card1Img} key={'card1Img'} alt={card1Img} />
+        <CardImg src={card2Img} key={'card2Img'} alt={card2Img} />
       </Box>
       {player.name}
       {!!player.coins && (

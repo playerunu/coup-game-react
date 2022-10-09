@@ -11,6 +11,7 @@ import {
 import { Player } from 'types/Player';
 import { TablePlayer } from 'components/TablePlayer';
 import { TableCoins } from 'components/TableCoins';
+import { TableCards } from 'components/TableCards';
 
 export const GameTable: React.FC = () => {
   //const screenOrientation = useScreenOrientation();
@@ -40,13 +41,9 @@ export const GameTable: React.FC = () => {
             tableIndex < players.length;
             tableIndex++, gameIndex = (gameIndex + 1) % players.length
           ) {
-            console.log('Searcginh for ', gameIndex);
             const player = players.find((p) => p.gamePosition === gameIndex);
             if (player) {
-              console.log('Found', player);
               sortedPlayers.push(player);
-            } else {
-              console.log('Didnst find it wtf');
             }
           }
           setTablePlayers(sortedPlayers);
@@ -99,9 +96,12 @@ export const GameTable: React.FC = () => {
           </Box>
 
           <Box height="100%">
-            <TableCoins coins={tableCoins} />
+            {!!players.length && (
+              <TableCards totalCards={15 - players.length * 2} />
+            )}
+            <TableCoins totalCoins={tableCoins} />
           </Box>
-          
+
           <Box
             display="flex"
             flexDirection="column"

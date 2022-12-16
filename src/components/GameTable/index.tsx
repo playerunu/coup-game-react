@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 //import useScreenOrientation from "hooks/useScreenOrientation";
-import useWindowSize from 'hooks/useWindowSize';
 import { useAppSelector } from 'redux/hooks';
 import {
+  selectCurrentActionText,
   selectHeroPlayerName,
   selectPlayers,
   selectTableCoins,
@@ -12,6 +12,8 @@ import { Player } from 'types/Player';
 import { TablePlayer } from 'components/TablePlayer';
 import { TableCoins } from 'components/TableCoins';
 import { TableCards } from 'components/TableCards';
+import { useWindowSize } from 'hooks/useWindowSize';
+import { CoinsAction } from 'components/CoinsAction';
 
 export const GameTable: React.FC = () => {
   //const screenOrientation = useScreenOrientation();
@@ -24,6 +26,7 @@ export const GameTable: React.FC = () => {
   const players = useAppSelector(selectPlayers);
   const heroPlayerName = useAppSelector(selectHeroPlayerName);
   const tableCoins = useAppSelector(selectTableCoins);
+  const currentActionText = useAppSelector(selectCurrentActionText);
 
   const [tablePlayers, setTablePlayers] = useState<Player[]>([]);
   const [heroPlayer, setHeroPlayer] = useState<Player | undefined>(undefined);
@@ -95,12 +98,23 @@ export const GameTable: React.FC = () => {
             )}
           </Box>
 
-          <Box height="100%">
-            {!!players.length && (
+          <Stack alignItems="center" sx={{ width: '100%' }}>
+            {/* <Typography
+              variant="h5"
+              sx={{ marginBottom: '20px', fontWeight: 700 }}
+            >
+              {currentActionText}
+            </Typography> */}
+            <Box display="flex" flexDirection="row">
+              <TableCoins totalCoins={tableCoins} />
               <TableCards totalCards={15 - players.length * 2} />
-            )}
-            <TableCoins totalCoins={tableCoins} />
-          </Box>
+            </Box>
+            <Stack flexDirection="row" justifyContent="space-evenly">
+              <CoinsAction coinsNumber={1} />
+              <CoinsAction coinsNumber={2} />
+              <CoinsAction coinsNumber={3} />
+            </Stack>
+          </Stack>
 
           <Box
             display="flex"

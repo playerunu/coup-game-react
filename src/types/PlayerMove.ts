@@ -1,8 +1,8 @@
-import { Action } from "./Action";
-import { Player } from "./Player";
-import { Block } from "./Block";
-import { Challenge } from "./Challenge";
-import { ActionType } from "./Action";
+import { Action } from './Action';
+import { Player } from './Player';
+import { Block } from './Block';
+import { Challenge } from './Challenge';
+import { ActionType } from './Action';
 
 export type PlayerMove = {
   action: Action;
@@ -14,10 +14,10 @@ export type PlayerMove = {
   block?: Block;
 };
 
-export function playerMoveToStr(
+export const playerMoveToStr = (
   playerMove: PlayerMove,
   playerName: string
-): string {
+): string => {
   switch (playerMove.action.actionType) {
     case ActionType.TakeOneCoin:
       return `${playerName} takes 1 coin`;
@@ -34,6 +34,6 @@ export function playerMoveToStr(
     case ActionType.Exchange:
       return `${playerName} wants to exchange cards.`;
     default:
-      return "Invalid state";
+      return 'Invalid state';
   }
-}
+};

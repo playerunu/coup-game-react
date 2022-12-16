@@ -14,9 +14,11 @@ import {
   setHeroPlayerName,
 } from 'redux/game/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { useWebpImage } from 'utils/image';
 
 export const Level: React.FC = () => {
+  const [backgroundImg] = useWebpImage('background.jpg');
   const dispatch = useAppDispatch();
 
   const gameStarted = useAppSelector(selectGameStarted);
@@ -27,7 +29,7 @@ export const Level: React.FC = () => {
 
   useEffect(() => {
     const heroPlayerName = uniqueNamesGenerator({
-      dictionaries: [adjectives, colors, animals],
+      dictionaries: [adjectives, animals],
     });
 
     sendMessage({
@@ -40,12 +42,17 @@ export const Level: React.FC = () => {
     dispatch(setHeroPlayerName(heroPlayerName));
   }, [dispatch, sendMessage]);
 
-  return gameStarted ? (
-    <GameTable />
-  ) : (
-    <>
-      <Typography variant="h3"> Welcome {heroPlayerName}!</Typography>
-      <Typography variant="h4"> Waiting for game to start...</Typography>
-    </>
+  return (
+    // <Box sx={{ backgroundImage: `url(${backgroundImg})`}}>
+    <Box sx={{ backgroundColor: 'rgb(255, 160, 30)' }}>
+      {gameStarted ? (
+        <GameTable />
+      ) : (
+        <>
+          <Typography variant="h3"> Welcome {heroPlayerName}!</Typography>
+          <Typography variant="h4"> Waiting for game to start...</Typography>
+        </>
+      )}
+    </Box>
   );
 };

@@ -6,7 +6,9 @@ import { influenceToImgSrc } from 'types/Influence';
 import styled from 'styled-components';
 
 const CardImg = styled.img`
+  width: 60px;
   border-radius: 4px;
+  border: 1px solid #555;
 `;
 
 export type TablePlayerProps = {

@@ -12,8 +12,10 @@ export const useMousePosition = () => {
     };
 
     const updateFromTouchEvent = (ev: TouchEvent) => {
-      const touch = ev.touches[0];
-      setMousePosition({ x: touch.clientX, y: touch.clientY });
+      if (!!ev.touches[0]) {
+        const touch = ev.touches[0];
+        setMousePosition({ x: touch.clientX, y: touch.clientY });
+      }
     };
 
     window.addEventListener('touchstart', updateFromTouchEvent);
@@ -23,7 +25,6 @@ export const useMousePosition = () => {
     window.addEventListener('dragover', updateFromMouseEvent);
     window.addEventListener('dragstart', updateFromMouseEvent);
 
-
     return () => {
       window.removeEventListener('touchmove', updateFromTouchEvent);
       window.removeEventListener('touchstart', updateFromTouchEvent);
@@ -31,7 +32,6 @@ export const useMousePosition = () => {
       window.removeEventListener('mousemove', updateFromMouseEvent);
       window.removeEventListener('dragover', updateFromMouseEvent);
       window.removeEventListener('dragstart', updateFromMouseEvent);
-
     };
   }, []);
 

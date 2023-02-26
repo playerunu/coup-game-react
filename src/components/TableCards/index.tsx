@@ -13,6 +13,9 @@ const CardsContainer = styled(Stack)<{ $isclicked: boolean }>`
   user-select: none;
   width: 160px;
   cursor: ${(props) => (props.$isclicked ? 'grabbing' : '')};
+  :hover {
+    cursor: ${(props) => (!props.$isclicked ? 'pointer' : '')}; 
+  }
 `;
 
 // TODO make this a component
@@ -97,7 +100,6 @@ export const TableCards: React.FC<TableCardProps> = ({ totalCards }) => {
 
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const handleMouseDown = useCallback((event: MouseEvent | TouchEvent) => {
-    console.log('setting is clicked hahaha');
     setIsClicked(true);
   }, []);
 

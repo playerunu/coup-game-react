@@ -8,7 +8,6 @@ export const useMousePosition = () => {
 
   useEffect(() => {
     const updateFromPointerEvent = (ev: PointerEvent | MouseEvent) => {
-      console.log('updating :', ev.clientX, ev.clientY);
       setMousePosition({ x: ev.clientX, y: ev.clientY });
     };
 

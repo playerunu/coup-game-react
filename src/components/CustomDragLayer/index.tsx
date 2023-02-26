@@ -29,7 +29,6 @@ const getItemStyles = (isDragging: boolean, currentOffset: XYCoord | null) => {
 
   let { x, y } = currentOffset;
   const transform = `translate(${x}px, ${y}px)`;
-  console.log('randez ca bosul', transform);
 
   return {
     transform,
@@ -90,10 +89,6 @@ export const CustomDragLayer: FC<CustomDragLayerProps> = ({
         return null;
     }
   };
-
-  useEffect(() => {
-    console.log(isDragging);
-  }, [isDragging]);
 
   return (
     <DragLayerDiv $isDragging={isDragging || visible}>

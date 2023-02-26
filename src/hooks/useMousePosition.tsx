@@ -7,31 +7,23 @@ export const useMousePosition = () => {
   );
 
   useEffect(() => {
-    const updateFromMouseEvent = (ev: MouseEvent) => {
+    const updateFromPointerEvent = (ev: PointerEvent | MouseEvent) => {
+      console.log('updating :', ev.clientX, ev.clientY);
       setMousePosition({ x: ev.clientX, y: ev.clientY });
     };
 
-    const updateFromTouchEvent = (ev: TouchEvent) => {
-      if (!!ev.touches[0]) {
-        const touch = ev.touches[0];
-        setMousePosition({ x: touch.clientX, y: touch.clientY });
-      }
-    };
+    window.addEventListener('pointerdown', updateFromPointerEvent);
+    window.addEventListener('pointermove', updateFromPointerEvent);
 
-    window.addEventListener('touchstart', updateFromTouchEvent);
-    window.addEventListener('touchmove', updateFromTouchEvent);
-
-    window.addEventListener('mousemove', updateFromMouseEvent);
-    window.addEventListener('dragover', updateFromMouseEvent);
-    window.addEventListener('dragstart', updateFromMouseEvent);
+    window.addEventListener('dragover', updateFromPointerEvent);
+    window.addEventListener('dragstart', updateFromPointerEvent);
 
     return () => {
-      window.removeEventListener('touchmove', updateFromTouchEvent);
-      window.removeEventListener('touchstart', updateFromTouchEvent);
+      window.removeEventListener('pointerdown', updateFromPointerEvent);
+      window.removeEventListener('pointermove', updateFromPointerEvent);
 
-      window.removeEventListener('mousemove', updateFromMouseEvent);
-      window.removeEventListener('dragover', updateFromMouseEvent);
-      window.removeEventListener('dragstart', updateFromMouseEvent);
+      window.removeEventListener('dragover', updateFromPointerEvent);
+      window.removeEventListener('dragstart', updateFromPointerEvent);
     };
   }, []);
 

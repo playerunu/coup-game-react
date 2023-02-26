@@ -38,18 +38,24 @@ export const GameTable: React.FC = () => {
         setHeroPlayer(hero);
 
         if (players.length > 1 && hero?.gamePosition !== undefined) {
-          const sortedPlayers: Player[] = [];
+          let sortedPlayers: Player[] = [];
           for (
             let tableIndex = 0, gameIndex = hero.gamePosition;
             tableIndex < players.length;
             tableIndex++, gameIndex = (gameIndex + 1) % players.length
           ) {
-            const player = players.find((p) => p.gamePosition === gameIndex);
+            let player = players.find((p) => p.gamePosition === gameIndex);
             if (player) {
-              sortedPlayers.push(player);
+              sortedPlayers.push({ ...player, coins: 12 } as Player);
             }
           }
-          setTablePlayers(sortedPlayers);
+          setTablePlayers([
+            ...sortedPlayers,
+            sortedPlayers[1],
+            sortedPlayers[1],
+            sortedPlayers[1],
+            sortedPlayers[1],
+          ]);
         }
       }
     }
@@ -76,7 +82,7 @@ export const GameTable: React.FC = () => {
 
         <Box
           display="flex"
-          flex={0.6}
+          flex={0.2}
           justifyContent="space-between"
           alignItems="center"
         >
@@ -98,6 +104,31 @@ export const GameTable: React.FC = () => {
             )}
           </Box>
 
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            rowGap={'10px'}
+            height="100%"
+          >
+            {/* 6TH PLAYER */}
+            {tablePlayers.length === 6 && (
+              <TablePlayer player={tablePlayers[5]} showCoinsOnLeft={true} />
+            )}
+
+            {/* 5TH PLAYER */}
+            {tablePlayers.length >= 5 && (
+              <TablePlayer player={tablePlayers[4]} showCoinsOnLeft={true} />
+            )}
+          </Box>
+        </Box>
+
+        <Box
+          display="flex"
+          flex={0.2}
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <Stack alignItems="center" sx={{ width: '100%' }}>
             {/* <Typography
               variant="h5"
@@ -109,30 +140,12 @@ export const GameTable: React.FC = () => {
               <TableCoins totalCoins={tableCoins} />
               <TableCards totalCards={15 - players.length * 2} />
             </Box>
-            <Stack flexDirection="row" justifyContent="space-evenly">
+            {/* <Stack flexDirection="row" justifyContent="space-evenly">
               <CoinsAction coinsNumber={1} />
               <CoinsAction coinsNumber={2} />
               <CoinsAction coinsNumber={3} />
-            </Stack>
+            </Stack> */}
           </Stack>
-
-          <Box
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            rowGap={'10px'}
-            height="100%"
-          >
-            {/* 6TH PLAYER */}
-            {tablePlayers.length === 6 && (
-              <TablePlayer player={tablePlayers[5]} />
-            )}
-
-            {/* 5TH PLAYER */}
-            {tablePlayers.length >= 5 && (
-              <TablePlayer player={tablePlayers[4]} />
-            )}
-          </Box>
         </Box>
 
         <Box

@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import { TableCoin } from 'components/TableCoins';
 import { DraggableType } from 'constants/DraggableType';
 import React, { useEffect } from 'react';
 import { useDrop } from 'react-dnd';

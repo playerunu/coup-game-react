@@ -1,39 +1,23 @@
-import { isVisible } from '@testing-library/user-event/dist/utils';
 import { DraggableType } from 'constants/DraggableType';
 import { useMousePosition } from 'hooks/useMousePosition';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import type { XYCoord } from 'react-dnd';
 import { useDragLayer } from 'react-dnd';
 import styled from 'styled-components';
 import { useWebpImage } from 'utils/image';
 
-const DragLayerDiv = styled.div`
+const DragLayerDiv = styled.div<{ $isDragging: boolean }>`
+  opacity: ${({ $isDragging }) => ($isDragging ? 1 : 0)};
   position: fixed;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
   pointer-events: none;
   z-index: 10000;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-`;
-
-const ImgContainer = styled.div<{
-  isDragging: boolean;
-  currentOffset: XYCoord | null;
-}>`
-  ${(props) => {
-    if (!props.currentOffset || !props.isDragging) {
-      return 'display: none';
-    }
-
-    let { x, y } = props.currentOffset;
-    const transform = `translate(${x}px, ${y}px)`;
-
-    return `
-      transform: ${transform};
-      WebkitTransform: ${transform};
-    `;
-  }}
+  transition: opacity 0.25 s;
 `;
 
 const getItemStyles = (isDragging: boolean, currentOffset: XYCoord | null) => {
@@ -44,12 +28,10 @@ const getItemStyles = (isDragging: boolean, currentOffset: XYCoord | null) => {
   }
 
   let { x, y } = currentOffset;
-
   const transform = `translate(${x}px, ${y}px)`;
+  console.log('randez ca bosul', transform);
 
   return {
-    // left: x,
-    // top: y,
     transform,
     WebkitTransform: transform,
   };
@@ -114,7 +96,7 @@ export const CustomDragLayer: FC<CustomDragLayerProps> = ({
   }, [isDragging]);
 
   return (
-    <DragLayerDiv>
+    <DragLayerDiv $isDragging={isDragging || visible}>
       {/* <ImgContainer isDragging={isDragging} currentOffset={mousePosition}> */}
       <div style={getItemStyles(isDragging || visible, mousePosition)}>
         {renderItem()}

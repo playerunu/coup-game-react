@@ -7,6 +7,7 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useWebpImage } from 'utils/image';
 import { DraggableType } from 'constants/DraggableType';
 import { CustomDragLayer } from 'components/CustomDragLayer';
+import { NoiseBackground } from 'components/NoiseBackground';
 
 const CardsContainer = styled(Stack)<{ $isclicked: boolean }>`
   justify-content: end;
@@ -139,6 +140,7 @@ export const TableCards: React.FC<TableCardProps> = ({ totalCards }) => {
   return (
     <>
       <CustomDragLayer visible={isClicked} dragItemType={DraggableType.CARD} />
+      <NoiseBackground />
 
       <CardsContainer ref={tableCardsRef} $isclicked={isClicked}>
         <Box

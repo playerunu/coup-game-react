@@ -109,8 +109,17 @@ export const TablePlayer: React.FC<TablePlayerProps> = ({
     </Stack>
   );
 
+  const [isHover, setIsHover] = useState<boolean>(false);
+
   return (
-    <Box>
+    <Box
+      onPointerEnter={() => {
+        setIsHover(true);
+      }}
+      onPointerLeave={() => {
+        setIsHover(false);
+      }}
+    >
       <Box
         display="flex"
         flexDirection="row"
@@ -126,7 +135,38 @@ export const TablePlayer: React.FC<TablePlayerProps> = ({
         </Box>
         {!showCoinsOnLeft && playerCoins}
       </Box>
-      <>{player.name}</>
+      <Box display="flex" flexDirection="row">
+        <Box sx={{ position: 'absolute', overflow: 'hidden' }}>
+          <Box
+            sx={[
+              {
+                transform: 'translateX(-100%) translateZ(0px)',
+                transitionProperty: 'transform',
+                transitionDuration: '0.5s',
+              },
+              isHover && {
+                transform: 'translateX(0%) translateZ(0px)',
+              },
+            ]}
+          >
+            →
+          </Box>
+        </Box>
+
+        <Box
+          sx={[
+            {
+              transitionProperty: 'transform',
+              transitionDuration: '0.5s',
+            },
+            isHover && {
+              transform: 'translateX(24px) translateZ(0px)',
+            },
+          ]}
+        >
+          {player.name}
+        </Box>
+      </Box>
     </Box>
   );
 };

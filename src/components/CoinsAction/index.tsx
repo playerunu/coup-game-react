@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import { DraggableType } from 'constants/DraggableType';
 import React, { useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import {
@@ -9,6 +8,7 @@ import {
 import { useAppDispatch } from 'redux/hooks';
 import styled from 'styled-components';
 import { ActionType } from 'types/Action';
+import { Draggable } from 'types/DraggableType';
 import { useWebpImage } from 'utils/image';
 
 export type TakeCoinsProps = {
@@ -38,7 +38,7 @@ export const CoinsAction: React.FC<TakeCoinsProps> = ({ coinsNumber }) => {
 
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: DraggableType.CARD,
+      accept: Draggable.COIN,
       //drop: () => game.moveKnight(x, y),
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),

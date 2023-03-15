@@ -4,7 +4,6 @@ import { GameMessage } from 'types/GameMessage';
 import {
   adjectives,
   animals,
-  colors,
   uniqueNamesGenerator,
 } from 'unique-names-generator';
 import { useSendMessageMutation, useWsListenerQuery } from 'redux/game/api';
@@ -15,10 +14,9 @@ import {
 } from 'redux/game/slice';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { Box, Typography } from '@mui/material';
-import { useWebpImage } from 'utils/image';
+import { BACKGROUND_COLOR } from 'constants/theme';
 
 export const Level: React.FC = () => {
-  const [backgroundImg] = useWebpImage('background.jpg');
   const dispatch = useAppDispatch();
 
   const gameStarted = useAppSelector(selectGameStarted);
@@ -43,8 +41,7 @@ export const Level: React.FC = () => {
   }, [dispatch, sendMessage]);
 
   return (
-    // <Box sx={{ backgroundImage: `url(${backgroundImg})`}}>
-    <Box sx={{ backgroundColor: 'rgb(255, 160, 30)' }}>
+    <Box sx={{ backgroundColor: BACKGROUND_COLOR }}>
       {gameStarted ? (
         <GameTable />
       ) : (

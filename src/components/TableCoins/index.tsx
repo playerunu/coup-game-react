@@ -1,11 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import React, { useRef } from 'react';
+import { Box, Stack } from '@mui/material';
 import { useWebpImage } from 'utils/image';
 import styled from 'styled-components';
-import { useDrag } from 'react-dnd';
-import { DraggableType } from 'constants/DraggableType';
-import { CoinsAction } from 'components/CoinsAction';
-import { getEmptyImage } from 'react-dnd-html5-backend';
+import { Draggable, DraggableType } from 'types/DraggableType';
+import { useDraggableNode } from 'hooks/useDraggableNode';
+
+const CoinsContainer = styled(Stack)<{ $isclicked: boolean }>`
+  justify-content: end;
+  user-select: none;
+  width: 160px;
+  cursor: ${(props) => (props.$isclicked ? 'grabbing' : '')};
+  :hover {
+    cursor: ${(props) => (!props.$isclicked ? 'pointer' : '')};
+  }
+`;
 
 export const TableCoin = styled.img<{
   row: number;
@@ -39,59 +47,17 @@ const COINS_PER_COLUMN = 10;
 
 export const TableCoins: React.FC<TableCoinsProps> = ({ totalCoins }) => {
   const [coinImgSrc] = useWebpImage('coin.png');
-  const [isClicked, setIsClicked] = useState<boolean>(false);
-
-  const [{ isDragging }, drag, preview] = useDrag(
-    () => ({
-      type: DraggableType.COIN,
-      options: {
-        dropEffect: 'copy',
-      },
-      collect: (monitor) => ({
-        isDragging: !!monitor.isDragging() || isClicked,
-      }),
-    }),
-    []
-  );
-
-  useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: true });
-  }, [preview]);
 
   const tableCoinsRef = useRef<HTMLDivElement | null>(null);
-  const [isCursorOver, setIsCurosOver] = useState<boolean>(false);
-  const handleMouseOver = () => setIsCurosOver(true);
-  const handleMouseOut = () => setIsCurosOver(false);
-
-  useEffect(() => {
-    const node = tableCoinsRef.current;
-    if (node) {
-      node.addEventListener('mouseover', handleMouseOver);
-      node.addEventListener('mouseout', handleMouseOut);
-      node.addEventListener('dragstop', handleMouseOut);
-
-      return () => {
-        node.removeEventListener('mouseover', handleMouseOver);
-        node.removeEventListener('mouseout', handleMouseOut);
-        node.removeEventListener('dragstop', handleMouseOut);
-      };
-    }
-  }, []);
+  const { isCursorOver, isClicked, isDragging, connectedDragSource } =
+    useDraggableNode(tableCoinsRef.current, Draggable.COIN as DraggableType);
 
   return (
     <>
-      {/* <DragPreviewImage connect={preview} src={coinImgSrc} /> */}
-      {/* <CustomDragLayer visible={isClicked} dragItemType={DraggableType.COIN}/> */}
-      <Stack
-        justifyContent="end"
-        sx={{ userSelect: 'none' }}
-        onClick={() => {
-          setIsClicked(!isClicked);
-        }}
-      >
+      <CoinsContainer ref={tableCoinsRef} $isclicked={isClicked}>
         <div ref={tableCoinsRef}>
           <Box
-            ref={drag}
+            ref={connectedDragSource}
             display="grid"
             columnGap="3px"
             // 10 stacked coins per row
@@ -137,12 +103,9 @@ export const TableCoins: React.FC<TableCoinsProps> = ({ totalCoins }) => {
               }}
             />
           </Box>
-          <Typography variant="body2" textAlign="center">
-            {totalCoins} coins
-          </Typography>
         </div>
 
-        <Stack
+        {/* <Stack
           flexDirection="row"
           justifyContent="space-evenly"
           sx={{
@@ -152,8 +115,8 @@ export const TableCoins: React.FC<TableCoinsProps> = ({ totalCoins }) => {
           <CoinsAction coinsNumber={1} />
           <CoinsAction coinsNumber={2} />
           <CoinsAction coinsNumber={3} />
-        </Stack>
-      </Stack>
+        </Stack> */}
+      </CoinsContainer>
     </>
   );
 };

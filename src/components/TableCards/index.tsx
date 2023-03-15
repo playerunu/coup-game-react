@@ -1,13 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDrag } from 'react-dnd';
-import { Box, Stack, Typography } from '@mui/material';
+import React, {
+  useRef,
+} from 'react';
+import { Box, Stack } from '@mui/material';
 import styled from 'styled-components';
-import { getEmptyImage } from 'react-dnd-html5-backend';
-
 import { useWebpImage } from 'utils/image';
-import { DraggableType } from 'constants/DraggableType';
-import { CustomDragLayer } from 'components/CustomDragLayer';
-import { NoiseBackground } from 'components/NoiseBackground';
+import { Draggable, DraggableType } from 'types/DraggableType';
+import { useDraggableNode } from 'hooks/useDraggableNode';
 
 const CardsContainer = styled(Stack)<{ $isclicked: boolean }>`
   justify-content: end;
@@ -15,33 +13,39 @@ const CardsContainer = styled(Stack)<{ $isclicked: boolean }>`
   width: 160px;
   cursor: ${(props) => (props.$isclicked ? 'grabbing' : '')};
   :hover {
-    cursor: ${(props) => (!props.$isclicked ? 'pointer' : '')}; 
+    cursor: ${(props) => (!props.$isclicked ? 'pointer' : '')};
   }
 `;
 
-// TODO make this a component
 const CardBack = styled.img<{
   cardIndex: number;
   showShadow: boolean;
   isCursorOver: boolean;
-  $isClicked: boolean;
-  $isDragging: boolean;
+  isClicked: boolean;
+  isDragging: boolean;
 }>`
-visibility: ${(props) =>
-  props.cardIndex <= 1 && (props.$isClicked || props.$isDragging)
-    ? 'hidden'
-    : ''}; 
-
-  transform: ${(props) =>
-    `perspective(500px) rotateZ(90deg) rotateY(-50deg)  translate(${
-      props.cardIndex * 2
-    }px)`};
+  // Hide the first two cards while dragging
+  visibility: ${(props) =>
+    props.cardIndex <= 1 && (props.isClicked || props.isDragging)
+      ? 'hidden'
+      : ''}; 
+  
+  // Stack the cards from bottom to top
   z-index: ${(props) => 100 - props.cardIndex};
+  
+  // Shadow for the last card in the stack
   filter: ${(props) =>
     props.showShadow === true
       ? 'drop-shadow(8px 0px 3px rgb(180, 110, 20))'
       : ''};
-  grid-column: ${(props) => props.cardIndex + 2};
+
+  // Rotate the cards 90 degreese and add 3d perpective
+  transform: ${(props) =>
+    `perspective(500px) rotateZ(90deg) rotateY(-50deg)  translate(${
+      props.cardIndex * 2
+    }px)`};
+  
+  // On hover effect for the first two cards in the stack
   ${(props) => {
     if (props.cardIndex <= 1) {
       if (props.isCursorOver) {
@@ -58,12 +62,18 @@ visibility: ${(props) =>
   }}}
 
   display: ${(props) =>
-    props.cardIndex <= 1 && props.$isClicked ? '' : 'block'};
+    props.cardIndex <= 1 && props.isClicked ? '' : 'block'};
   
   grid-row: 1;
+  grid-column: ${(props) => props.cardIndex + 2};
+  
   border-radius: 4px;
   height: 100%;
   border: 1px solid #555;
+    
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    width: 50px;
+   }
 `;
 
 export type TableCardProps = {
@@ -73,83 +83,17 @@ export type TableCardProps = {
 export const TableCards: React.FC<TableCardProps> = ({ totalCards }) => {
   const [cardBackImg] = useWebpImage('back.png');
 
-  const [{ isDragging }, drag, preview] = useDrag(
-    () => ({
-      type: DraggableType.CARD,
-      options: {
-        dropEffect: 'copy',
-      },
-      collect: (monitor) => ({
-        isDragging: !!monitor.isDragging(),
-      }),
-    }),
-    []
-  );
-
-  useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: true });
-  }, [preview]);
-
   const tableCardsRef = useRef<HTMLDivElement | null>(null);
-  const [isCursorOver, setIsCursorOver] = useState<boolean>(false);
-  const handleMouseOver = () => {
-    setIsCursorOver(true);
-  };
-  const handleMouseOut = () => {
-    setIsCursorOver(false);
-  };
-
-  const [isClicked, setIsClicked] = useState<boolean>(false);
-  const handleMouseDown = useCallback((event: MouseEvent | TouchEvent) => {
-    setIsClicked(true);
-  }, []);
-
-  const handleTouch = useCallback((event: TouchEvent) => {
-    setIsClicked(true);
-  }, []);
-
-  const handleMouseUp = useCallback(() => {
-    setIsClicked(false);
-  }, []);
-
-  useEffect(() => {
-    const node = tableCardsRef.current;
-    if (node) {
-      node.addEventListener('pointerenter', handleMouseOver);
-      node.addEventListener('pointerleave', handleMouseOut);
-      node.addEventListener('pointerdown', handleMouseDown);
-      window.addEventListener('pointerup', handleMouseUp);
-
-      window.addEventListener('dragstart', handleMouseUp);
-      window.addEventListener('dragstart', handleMouseOut);
-      window.addEventListener('dragend', handleMouseUp);
-      window.addEventListener('dragend', handleMouseOut);
-
-      return () => {
-        node.removeEventListener('pointerenter', handleMouseOver);
-        node.removeEventListener('pointerleave', handleMouseOut);
-        node.removeEventListener('pointerdown', handleMouseDown);
-        window.removeEventListener('pointerup', handleMouseUp);
-
-        window.removeEventListener('dragstart', handleMouseUp);
-        window.removeEventListener('dragstart', handleMouseOut);
-        window.removeEventListener('dragend', handleMouseUp);
-        window.removeEventListener('dragend', handleMouseOut);
-      };
-    }
-  }, [handleMouseUp, handleMouseDown, handleTouch]);
-
+  const { isCursorOver, isClicked, isDragging, connectedDragSource } =
+    useDraggableNode(tableCardsRef.current, Draggable.CARD as DraggableType);
+  
   return (
     <>
-      <CustomDragLayer visible={isClicked} dragItemType={DraggableType.CARD} />
-      <NoiseBackground />
-
       <CardsContainer ref={tableCardsRef} $isclicked={isClicked}>
         <Box
-          ref={drag}
+          ref={connectedDragSource}
           sx={{
             width: '100%',
-            marginBottom: '-10px',
             alignSelf: 'center',
             display: 'grid',
             gridTemplateColumns: '0.5fr repeat(10, 0px) 0.5fr',
@@ -163,15 +107,12 @@ export const TableCards: React.FC<TableCardProps> = ({ totalCards }) => {
               cardIndex={index}
               showShadow={index === totalCards - 1}
               isCursorOver={isCursorOver}
-              $isClicked={isClicked}
-              $isDragging={isDragging}
+              isClicked={isClicked}
+              isDragging={isDragging}
             />
           ))}
           <Box sx={{ gridColumn: totalCards + 3 }} />
         </Box>
-        <Typography variant="body2" alignSelf="center">
-          {totalCards} cards
-        </Typography>
       </CardsContainer>
     </>
   );

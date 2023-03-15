@@ -13,7 +13,7 @@ const DragLayerDiv = styled.div<{ $isDragging: boolean }>`
   background-image: url(/noise.png);
   background-size: 200px;
   background-repeat: repeat;
-  opacity: 0.25;
+  opacity: 0.45;
   pointer-events: none;
 
   @keyframes grain {

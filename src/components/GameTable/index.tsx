@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 //import useScreenOrientation from "hooks/useScreenOrientation";
 import { useAppSelector } from 'redux/hooks';
 import {
-  selectCurrentActionText,
   selectHeroPlayerName,
   selectPlayers,
   selectTableCoins,
@@ -13,7 +12,9 @@ import { TablePlayer } from 'components/TablePlayer';
 import { TableCoins } from 'components/TableCoins';
 import { TableCards } from 'components/TableCards';
 import { useWindowSize } from 'hooks/useWindowSize';
-import { CoinsAction } from 'components/CoinsAction';
+import { CustomDragLayer } from 'components/CustomDragLayer';
+import { NoiseBackground } from 'components/NoiseBackground';
+import { CurrentActionDescription } from 'components/CurrentActionDescription';
 
 export const GameTable: React.FC = () => {
   //const screenOrientation = useScreenOrientation();
@@ -26,7 +27,6 @@ export const GameTable: React.FC = () => {
   const players = useAppSelector(selectPlayers);
   const heroPlayerName = useAppSelector(selectHeroPlayerName);
   const tableCoins = useAppSelector(selectTableCoins);
-  const currentActionText = useAppSelector(selectCurrentActionText);
 
   const [tablePlayers, setTablePlayers] = useState<Player[]>([]);
   const [heroPlayer, setHeroPlayer] = useState<Player | undefined>(undefined);
@@ -63,12 +63,18 @@ export const GameTable: React.FC = () => {
 
   return (
     <>
+      <CustomDragLayer />
+      <NoiseBackground />
+
       <Box
         display="flex"
         height={windowHeight}
         width="100vw"
         flexDirection="column"
       >
+        <Stack alignItems={'center'} flex={0.1}>
+          <CurrentActionDescription />
+        </Stack>
         <Box
           display="flex"
           flex={0.2}
@@ -130,12 +136,6 @@ export const GameTable: React.FC = () => {
           alignItems="center"
         >
           <Stack alignItems="center" sx={{ width: '100%' }}>
-            {/* <Typography
-              variant="h5"
-              sx={{ marginBottom: '20px', fontWeight: 700 }}
-            >
-              {currentActionText}
-            </Typography> */}
             <Box display="flex" flexDirection="row">
               <TableCoins totalCoins={tableCoins} />
               <TableCards totalCards={15 - players.length * 2} />

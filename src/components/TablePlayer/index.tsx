@@ -4,6 +4,7 @@ import { useWebpImage } from 'utils/image';
 import { Player } from 'types/Player';
 import { influenceToImgSrc } from 'types/Influence';
 import styled from 'styled-components';
+import { SHADOW_COLOR } from 'constants/theme';
 
 const CardImg = styled.img`
   ${({ theme }) => theme.breakpoints.down('sm')} {
@@ -28,7 +29,7 @@ export const TableCoin = styled.img<{
   z-index: ${(props) => 100 - props.row};
   filter: ${(props) =>
     props.showShadow === true
-      ? 'drop-shadow(1px 9px 4px rgb(180, 110, 20))'
+      ? `drop-shadow(1px 9px 4px ${SHADOW_COLOR})`
       : ''};
   }};
 

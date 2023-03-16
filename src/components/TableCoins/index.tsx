@@ -4,6 +4,7 @@ import { useWebpImage } from 'utils/image';
 import styled from 'styled-components';
 import { Draggable, DraggableType } from 'types/DraggableType';
 import { useDraggableNode } from 'hooks/useDraggableNode';
+import { SHADOW_COLOR } from 'constants/theme';
 
 const CoinsContainer = styled(Stack)<{ $isclicked: boolean }>`
   justify-content: end;
@@ -20,14 +21,18 @@ export const TableCoin = styled.img<{
   column: number;
   showShadow: boolean;
 }>`
-  grid-row: ${(props) => props.row + 1};
-  grid-column: ${(props) => props.column + 2};
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    width: 25px;
+  }
+  
+  grid-row: ${(props) => props.row};
+  grid-column: ${(props) => props.column};
   filter: ${(props) =>
     props.showShadow === true
-      ? 'drop-shadow(1px 9px 4px rgb(180, 110, 20))'
+      ? `drop-shadow(1px 9px 4px ${SHADOW_COLOR})`
       : ''};
   transform: ${(props) => {
-    if (props.column < 2) {
+    if (props.column < 4) {
       return 'translateY(-35px) translateX(10px)';
       //return 'translateY(-35px)';
     } else {
@@ -73,10 +78,10 @@ export const TableCoins: React.FC<TableCoinsProps> = ({ totalCoins }) => {
             {[...Array(Math.floor(totalCoins / COINS_PER_COLUMN))].map(
               (x, column) => (
                 <>
-                  {[...Array(COINS_PER_COLUMN)].map((value, row) => (
+                  {[...Array(COINS_PER_COLUMN)].map((_, row) => (
                     <TableCoin
-                      row={COINS_PER_COLUMN - row - 1}
-                      column={column}
+                      row={COINS_PER_COLUMN - row}
+                      column={column + 2}
                       src={coinImgSrc}
                       draggable={false}
                       showShadow={row === 0}
@@ -86,11 +91,11 @@ export const TableCoins: React.FC<TableCoinsProps> = ({ totalCoins }) => {
               )
             )}
             {/* Render the last column, if any coins are left */}
-            {[...Array(totalCoins % COINS_PER_COLUMN)].map((value, row) => {
+            {[...Array(totalCoins % COINS_PER_COLUMN)].map((_, row) => {
               return (
                 <TableCoin
-                  row={COINS_PER_COLUMN - row - 1}
-                  column={Math.floor(totalCoins / COINS_PER_COLUMN)}
+                  row={COINS_PER_COLUMN - row}
+                  column={Math.floor(totalCoins / COINS_PER_COLUMN) + 2}
                   src={coinImgSrc}
                   draggable={false}
                   showShadow={row === 0}

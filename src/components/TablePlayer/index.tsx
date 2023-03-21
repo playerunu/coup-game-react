@@ -4,12 +4,14 @@ import { useWebpImage } from 'utils/image';
 import { Player } from 'types/Player';
 import { influenceToImgSrc } from 'types/Influence';
 import styled from 'styled-components';
-import { SHADOW_COLOR } from 'constants/theme';
+import { SHADOW_COLOR, SMALL_SCREEN_THEME_BREAKPOINT } from 'constants/theme';
 
 const CardImg = styled.img`
-  ${({ theme }) => theme.breakpoints.down('sm')} {
+  ${({ theme }) => theme.breakpoints.down(SMALL_SCREEN_THEME_BREAKPOINT)} {
     width: 50px;
   }
+
+  filter: drop-shadow(-3px 3px 10px ${SHADOW_COLOR});
 
   border-radius: 4px;
   border: 1px solid #555;
@@ -20,7 +22,7 @@ export const TableCoin = styled.img<{
   column: number;
   showShadow: boolean;
 }>`
-  ${({ theme }) => theme.breakpoints.down('sm')} {
+  ${({ theme }) => theme.breakpoints.down(SMALL_SCREEN_THEME_BREAKPOINT)} {
     width: 25px;
   }
  
@@ -32,9 +34,6 @@ export const TableCoin = styled.img<{
       ? `drop-shadow(1px 9px 4px ${SHADOW_COLOR})`
       : ''};
   }};
-
-  border-radius: 4px;
-  display: block;
 `;
 
 const COINS_PER_COLUMN = 7;

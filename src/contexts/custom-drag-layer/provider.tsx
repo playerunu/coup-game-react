@@ -10,14 +10,18 @@ export const CustomDragLayerProvider: React.FC<
   CustomDragLayerProviderProps
 > = ({ children }) => {
   const [dragItemType, setDragItemType] = useState<DraggableType>();
-  const [isVisible, setIsVisible] = useState<boolean>();
+  const [isClicked, setIsClicked] = useState<boolean>();
+  const [isCursorOver, setIsCursorOver] = useState<boolean>();
 
   return (
     <CustomDragLayerContext.Provider
       value={{
-        isVisible: !!isVisible,
+        isClicked: !!isClicked,
+        isCursorOver: !!isCursorOver,
         dragItemType,
-        setIsVisible,
+
+        setIsClicked,
+        setIsCursorOver,
         setDragItemType,
       }}
     >

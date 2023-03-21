@@ -2,16 +2,20 @@ import { createContext } from 'react';
 import { DraggableType } from 'types/DraggableType';
 
 export type DragLayerContext = {
-  isVisible: boolean;
+  isClicked: boolean;
+  isCursorOver: boolean;
   dragItemType?: DraggableType;
 
-  setIsVisible: (visible: boolean) => void;
-  setDragItemType: (dragItemType: DraggableType) => void;
+  setIsClicked: (clicked: boolean) => void;
+  setIsCursorOver: (hovered: boolean) => void;
+  setDragItemType: (dragItemType?: DraggableType) => void;
 };
 
 export const DRAG_LAYER_CONTEXT_DEFAULT = {
-  isVisible: false,
-  setIsVisible: () => {},
+  isClicked: false,
+  isCursorOver: false,
+  setIsClicked: () => {},
+  setIsCursorOver: () => {},
   setDragItemType: () => {},
 };
 

@@ -1,5 +1,5 @@
 import { CustomDragLayerContext } from 'contexts/custom-drag-layer/context';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import {
@@ -15,7 +15,13 @@ export const useDraggableNode = (
   draggableType: DraggableType
 ) => {
   const dispatch = useAppDispatch();
-  const { setIsVisible, setDragItemType } = useContext(CustomDragLayerContext);
+  const {
+    isCursorOver,
+    isClicked,
+    setIsCursorOver,
+    setIsClicked,
+    setDragItemType,
+  } = useContext(CustomDragLayerContext);
 
   const [{ isDragging }, connectedDragSource, preview] = useDrag(
     () => ({
@@ -34,29 +40,30 @@ export const useDraggableNode = (
     preview(getEmptyImage(), { captureDraggingState: true });
   }, [preview]);
 
-  const [isCursorOver, setIsCursorOver] = useState<boolean>(false);
-  const handlePointerOver = () => {
-    setIsCursorOver(true);
-  };
-  const handlePointerOut = () => {
-    setIsCursorOver(false);
-  };
+  const handlePointerOver = useCallback(() => {
+    if (!isDragging) {
+      setIsCursorOver(true);
+    }
+  }, [isDragging, setIsCursorOver]);
 
-  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const handlePointerOut = useCallback(() => {
+    if (!isDragging) {
+      setIsCursorOver(false);
+    }
+  }, [isDragging, setIsCursorOver]);
+
   const handlePointerDown = useCallback(() => {
     setDragItemType(draggableType);
     setIsClicked(true);
-    setIsVisible(true);
     dispatch(setPendingHeroPlayerMove(ActionType.Exchange));
-  }, [setIsVisible, setDragItemType, draggableType, dispatch]);
+  }, [setIsClicked, setDragItemType, draggableType, dispatch]);
 
   const handlePointerUp = useCallback(() => {
     setIsClicked(false);
-    setIsVisible(false);
 
-    // TODO 
+    // TODO
     dispatch(cancelPendingHeroPlayerMove());
-  }, [setIsVisible, dispatch]);
+  }, [setIsClicked, dispatch]);
 
   useEffect(() => {
     if (node) {
@@ -84,7 +91,18 @@ export const useDraggableNode = (
         window.removeEventListener('dragend', handlePointerOut);
       };
     }
-  }, [handlePointerUp, handlePointerDown, node]);
+  }, [
+    handlePointerUp,
+    handlePointerDown,
+    handlePointerOut,
+    handlePointerOver,
+    node,
+  ]);
 
-  return { isCursorOver, isClicked, isDragging, connectedDragSource };
+  return {
+    isCursorOver,
+    isClicked,
+    isDragging,
+    connectedDragSource,
+  };
 };

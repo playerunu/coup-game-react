@@ -65,5 +65,5 @@ export const NoiseBackground: FC = () => {
     isDragging: monitor.isDragging(),
   }));
 
-  return <DragLayerDiv $isDragging={isDragging} id="kkt" />;
+  return <DragLayerDiv $isDragging={isDragging} />;
 };

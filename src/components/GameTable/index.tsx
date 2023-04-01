@@ -68,7 +68,7 @@ export const GameTable: React.FC = () => {
 
       <Stack height={windowHeight} width="100vw">
         <Stack alignItems={'center'} 
-          flex="0.05 0.05 5%"
+          flex="0.07 0.07 7%"
           >
           <CurrentActionDescription />
         </Stack>

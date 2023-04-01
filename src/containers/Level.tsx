@@ -41,7 +41,7 @@ export const Level: React.FC = () => {
   }, [dispatch, sendMessage]);
 
   return (
-    <Box sx={{ backgroundColor: BACKGROUND_COLOR }}>
+    <Box sx={{ backgroundColor: BACKGROUND_COLOR}}>
       {gameStarted ? (
         <GameTable />
       ) : (

@@ -6,12 +6,12 @@ import { Draggable, DraggableType } from 'types/DraggableType';
 import { useDraggableNode } from 'hooks/useDraggableNode';
 import { SHADOW_COLOR, SMALL_SCREEN_THEME_BREAKPOINT } from 'constants/theme';
 
-const CardsContainer = styled(Stack)<{ $isclicked: boolean }>`
+const CardsContainer = styled(Stack)<{ $isGrabbing: boolean }>`
   justify-content: end;
   user-select: none;
-  cursor: ${(props) => (props.$isclicked ? 'grabbing' : '')};
+  cursor: ${(props) => (props.$isGrabbing ? 'grabbing' : '')};
   :hover {
-    cursor: ${(props) => (!props.$isclicked ? 'pointer' : '')};
+    cursor: ${(props) => (!props.$isGrabbing ? 'pointer' : '')};
   }
 `;
 
@@ -83,7 +83,7 @@ export const TableCards: React.FC<TableCardProps> = ({ totalCards }) => {
 
   return (
     <>
-      <CardsContainer $isclicked={isClicked}>
+      <CardsContainer $isGrabbing={isClicked || isDragging}>
         <div ref={tableCardsRef}>
           <Box
             ref={connectedDragSource}

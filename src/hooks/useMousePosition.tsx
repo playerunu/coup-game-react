@@ -11,7 +11,6 @@ export const useMousePosition = () => {
   useEffect(() => {
     const updateFromPointerEvent = (ev: PointerEvent | MouseEvent) => {
       setMousePosition({ x: ev.clientX, y: ev.clientY });
-      console.log('Updating from ', ev.clientX, ev.clientY, ev.type);
     };
 
     window.addEventListener('pointerdown', updateFromPointerEvent);

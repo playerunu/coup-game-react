@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Typography } from '@mui/material';
+import { Theme, Typography, useMediaQuery } from '@mui/material';
 import { selectCurrentActionText } from 'redux/game/slice';
 import { useAppSelector } from 'redux/hooks';
 import styled from 'styled-components';
+import { SMALL_SCREEN_THEME_BREAKPOINT } from 'constants/theme';
 
 const TextContainerContainer = styled.div<{
   $showNextActionAnimation: boolean;
 }>`
-  height: 40px;
   margin-top: 0;
 
   @keyframes new-action {
@@ -38,7 +38,7 @@ const TextContainerContainer = styled.div<{
       margin-top: -5px;
     }
     100% {
-      margin-top: -0px;
+      margin-top: 0px;
     }
   }
 
@@ -50,14 +50,15 @@ const TextContainerContainer = styled.div<{
 `;
 
 export const CurrentActionDescription: React.FC = () => {
+  const isSmallScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down(SMALL_SCREEN_THEME_BREAKPOINT));
+
   const currentActionText = useAppSelector(selectCurrentActionText);
   const [toggleTextAnimation, setToggleTextAnimation] =
     useState<boolean>(false);
-  const [firstLine, setFirstLine] = useState<string>('');
 
   useEffect(() => {
+    // Toggle animatoin on each text change
     setToggleTextAnimation(true);
-    setFirstLine(currentActionText);
   }, [currentActionText]);
 
   const onTextTransitionEnd = useCallback(() => {
@@ -69,8 +70,8 @@ export const CurrentActionDescription: React.FC = () => {
       $showNextActionAnimation={toggleTextAnimation}
       onAnimationEnd={() => onTextTransitionEnd()}
     >
-      <Typography variant="h4" align="center">
-        {firstLine}
+      <Typography variant={isSmallScreen ? 'h5': 'h3'} align="center">
+        {currentActionText}
       </Typography>
     </TextContainerContainer>
   );

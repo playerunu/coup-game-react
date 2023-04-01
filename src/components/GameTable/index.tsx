@@ -67,12 +67,14 @@ export const GameTable: React.FC = () => {
       <NoiseBackground />
 
       <Stack height={windowHeight} width="100vw">
-        <Stack alignItems={'center'} flex={0.1}>
+        <Stack alignItems={'center'} 
+          flex="0.05 0.05 5%"
+          >
           <CurrentActionDescription />
         </Stack>
         <Box
           display="flex"
-          flex={0.1}
+          flex="0.1 0.1 10%"
           flexDirection="row"
           justifyContent="center"
           alignItems="center"
@@ -83,7 +85,7 @@ export const GameTable: React.FC = () => {
 
         <Box
           display="flex"
-          flex={0.2}
+          flex="0.2 0.2 20%"
           justifyContent="space-between"
           alignItems="center"
         >
@@ -117,6 +119,7 @@ export const GameTable: React.FC = () => {
           justifyContent="center"
           alignItems="center"
           columnGap="40px"
+          flex="0.15 0.15 15%"
         >
           <TableCoins totalCoins={tableCoins} />
           <TableCards totalCards={15 - players.length * 2} />
@@ -124,7 +127,7 @@ export const GameTable: React.FC = () => {
 
         <Box
           display="flex"
-          flex={0.1}
+          flex="0.1 0.1 10%"
           flexDirection="row"
           justifyContent="center"
           alignItems="center"

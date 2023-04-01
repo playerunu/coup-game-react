@@ -6,7 +6,7 @@ import {
 } from 'constants/theme';
 import { CustomDragLayerContext } from 'contexts/custom-drag-layer/context';
 import { useMousePosition } from 'hooks/useMousePosition';
-import { CSSProperties, useContext } from 'react';
+import { CSSProperties, useContext, useEffect } from 'react';
 import type { XYCoord } from 'react-dnd';
 import { useDragLayer } from 'react-dnd';
 import styled from 'styled-components';
@@ -58,6 +58,7 @@ const CardBack = styled.img<{ cardIndex: number }>`
 
   background: rgba(157, 132, 255, 0.16);
 
+
   width: 40px;
   // ${({ theme }) => theme.breakpoints.down(SMALL_SCREEN_THEME_BREAKPOINT)} {
   //  TODO: fix the card size on small screens
@@ -65,7 +66,8 @@ const CardBack = styled.img<{ cardIndex: number }>`
   //  }
 `;
 
-const Coin = styled.img``;
+const Coin = styled.img`
+`;
 
 export const CustomDragLayer: React.FC = () => {
   // We use dragItemType from the context instead of the {itemType} from the useDragLayer()
@@ -118,6 +120,12 @@ export const CustomDragLayer: React.FC = () => {
         return null;
     }
   };
+
+  useEffect(() => {
+    document.addEventListener("dragover", (event) => {
+      event.preventDefault();
+    });
+  }, []);
 
   return (
     <DragLayerDiv>

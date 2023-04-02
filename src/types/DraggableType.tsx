@@ -1,5 +1,17 @@
-export const Draggable = {
-  COIN: 'coin',
-  CARD: 'card',
+import { ActionType } from "./Action";
+
+export enum DraggableType {
+  COIN = 'coin',
+  CARD = 'card',
 };
-export type DraggableType = keyof typeof Draggable;
+
+export type ActionDropTargetConfig = {
+  actionName: string;
+  actionType: ActionType;
+  dragItemType: DraggableType;
+  
+  logoImgSrc?: string;
+  backgroundColor?: string;
+  backgroundComponent?: React.ReactNode;
+   
+};

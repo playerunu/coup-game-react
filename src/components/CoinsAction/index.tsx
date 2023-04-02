@@ -1,14 +1,6 @@
-import { Box } from '@mui/material';
-import React, { useEffect } from 'react';
-import { useDrop } from 'react-dnd';
-import {
-  cancelPendingHeroPlayerMove,
-  setPendingHeroPlayerMove,
-} from 'redux/game/slice';
-import { useAppDispatch } from 'redux/hooks';
+import React  from 'react';
 import styled from 'styled-components';
-import { ActionType } from 'types/Action';
-import { Draggable } from 'types/DraggableType';
+import { Box } from '@mui/material';
 import { useWebpImage } from 'utils/image';
 
 export type TakeCoinsProps = {
@@ -33,34 +25,7 @@ export const CoinActionImg = styled.img<{
 `;
 
 export const CoinsAction: React.FC<TakeCoinsProps> = ({ coinsNumber }) => {
-  const dispatch = useAppDispatch();
   const [coinImgSrc] = useWebpImage('coin.png');
-
-  const [{ isOver }, drop] = useDrop(
-    () => ({
-      accept: Draggable.COIN,
-      //drop: () => game.moveKnight(x, y),
-      collect: (monitor) => ({
-        isOver: !!monitor.isOver(),
-        canDrop: !!monitor.canDrop(),
-      }),
-    }),
-    []
-  );
-
-  useEffect(() => {
-    if (isOver) {
-      if (coinsNumber === 1) {
-        dispatch(setPendingHeroPlayerMove(ActionType.TakeOneCoin));
-      } else if (coinsNumber === 2) {
-        dispatch(setPendingHeroPlayerMove(ActionType.TakeTwoCoins));
-      } else if (coinsNumber === 3) {
-        dispatch(setPendingHeroPlayerMove(ActionType.TakeThreeCoins));
-      }
-    } else {
-      dispatch(cancelPendingHeroPlayerMove());
-    }
-  }, [dispatch, isOver, coinsNumber]);
 
   const getTakeCoinsTemplateRows = (index: number): string => {
     let firstRowsTemplate = '';
@@ -72,15 +37,10 @@ export const CoinsAction: React.FC<TakeCoinsProps> = ({ coinsNumber }) => {
 
   return (
     <Box
-      ref={drop}
       display="grid"
       gridTemplateRows={getTakeCoinsTemplateRows(coinsNumber)}
-      sx={{
-        borderRadius: '4px',
-        ...(isOver && { backgroundColor: 'gray' }),
-      }}
     >
-      {[...Array(coinsNumber)].map((value, actionIndex) => (
+      {[...Array(coinsNumber)].map((_, actionIndex) => (
         <CoinActionImg
           src={coinImgSrc}
           row={actionIndex}

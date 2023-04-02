@@ -57,7 +57,7 @@ export const CurrentActionDescription: React.FC = () => {
     useState<boolean>(false);
 
   useEffect(() => {
-    // Toggle animatoin on each text change
+    // Toggle animation on each text change
     setToggleTextAnimation(true);
   }, [currentActionText]);
 

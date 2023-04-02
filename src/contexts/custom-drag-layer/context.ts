@@ -14,6 +14,7 @@ export type DragLayerContext = {
 export const DRAG_LAYER_CONTEXT_DEFAULT = {
   isClicked: false,
   isCursorOver: false,
+
   setIsClicked: () => {},
   setIsCursorOver: () => {},
   setDragItemType: () => {},

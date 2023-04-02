@@ -6,11 +6,11 @@ import {
 } from 'constants/theme';
 import { CustomDragLayerContext } from 'contexts/custom-drag-layer/context';
 import { useMousePosition } from 'hooks/useMousePosition';
-import { CSSProperties, useContext, useEffect } from 'react';
+import { CSSProperties, useContext } from 'react';
 import type { XYCoord } from 'react-dnd';
 import { useDragLayer } from 'react-dnd';
 import styled from 'styled-components';
-import { Draggable } from 'types/DraggableType';
+import { DraggableType } from 'types/DraggableType';
 import { useWebpImage } from 'utils/image';
 
 // opacity: ${({ $isDragging }) => ($isDragging ? 1 : 0)};
@@ -95,10 +95,10 @@ export const CustomDragLayer: React.FC = () => {
     }
 
     switch (dragItemType) {
-      case Draggable.COIN:
+      case DraggableType.COIN:
         return <Coin src={coinImg} alt={'coin'} />;
 
-      case Draggable.CARD:
+      case DraggableType.CARD:
         return (
           <>
             <CardBack
@@ -121,11 +121,6 @@ export const CustomDragLayer: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    document.addEventListener("dragover", (event) => {
-      event.preventDefault();
-    });
-  }, []);
 
   return (
     <DragLayerDiv>

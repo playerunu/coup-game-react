@@ -18,6 +18,7 @@ export const useDraggableNode = (
   const {
     isCursorOver,
     isClicked,
+    dragItemType,
     setIsCursorOver,
     setIsClicked,
     setDragItemType,
@@ -42,28 +43,45 @@ export const useDraggableNode = (
 
   const handlePointerOver = useCallback(() => {
     if (!isDragging) {
+      setDragItemType(draggableType);
       setIsCursorOver(true);
     }
-  }, [isDragging, setIsCursorOver]);
+  }, [isDragging, setIsCursorOver, setDragItemType, draggableType]);
 
   const handlePointerOut = useCallback(() => {
     if (!isDragging) {
+      setDragItemType(undefined);
       setIsCursorOver(false);
     }
-  }, [isDragging, setIsCursorOver]);
+  }, [isDragging, setIsCursorOver, setDragItemType]);
 
   const handlePointerDown = useCallback(() => {
     setDragItemType(draggableType);
     setIsClicked(true);
+
     dispatch(setPendingHeroPlayerMove(ActionType.Exchange));
   }, [setIsClicked, setDragItemType, draggableType, dispatch]);
 
   const handlePointerUp = useCallback(() => {
     setIsClicked(false);
+    setIsCursorOver(false);
+    setDragItemType(undefined);
 
-    // TODO
     dispatch(cancelPendingHeroPlayerMove());
-  }, [setIsClicked, dispatch]);
+  }, [setIsClicked, setDragItemType, dispatch]);
+
+  const handleDragStart = useCallback(() => {
+    setIsClicked(false);
+    setIsCursorOver(false);
+  }, [setIsClicked, setDragItemType, dispatch]);
+
+  const handleDragEnd = useCallback(() => {
+    setIsClicked(false);
+    setIsCursorOver(false);
+    setDragItemType(undefined);
+    dispatch(cancelPendingHeroPlayerMove());
+  }, [setIsClicked, setDragItemType, dispatch]);
+
 
   useEffect(() => {
     if (node) {
@@ -73,22 +91,18 @@ export const useDraggableNode = (
       node.addEventListener('pointerdown', handlePointerDown);
       window.addEventListener('pointerup', handlePointerUp);
 
-      window.addEventListener('dragstart', handlePointerUp);
-      window.addEventListener('dragend', handlePointerUp);
-
-      window.addEventListener('dragstart', handlePointerOut);
-      window.addEventListener('dragend', handlePointerOut);
+      node.addEventListener('dragstart', handleDragStart);
+      node.addEventListener('dragend', handleDragEnd);
 
       return () => {
         node.removeEventListener('pointerenter', handlePointerOver);
         node.removeEventListener('pointerleave', handlePointerOut);
+        
         node.removeEventListener('pointerdown', handlePointerDown);
         window.removeEventListener('pointerup', handlePointerUp);
 
-        window.removeEventListener('dragstart', handlePointerUp);
-        window.removeEventListener('dragstart', handlePointerOut);
-        window.removeEventListener('dragend', handlePointerUp);
-        window.removeEventListener('dragend', handlePointerOut);
+        node.removeEventListener('dragstart', handleDragStart);
+        node.removeEventListener('dragend', handleDragEnd);
       };
     }
   }, [
@@ -100,9 +114,9 @@ export const useDraggableNode = (
   ]);
 
   return {
-    isCursorOver,
-    isClicked,
-    isDragging,
+    isCursorOver : isCursorOver && dragItemType === draggableType,
+    isClicked: isClicked && dragItemType === draggableType,
+    isDragging: isDragging,
     connectedDragSource,
   };
 };

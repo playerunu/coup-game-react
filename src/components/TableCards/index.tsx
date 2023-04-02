@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Box, Stack } from '@mui/material';
 import styled from 'styled-components';
 import { useWebpImage } from 'utils/image';
-import { Draggable, DraggableType } from 'types/DraggableType';
+import { DraggableType } from 'types/DraggableType';
 import { useDraggableNode } from 'hooks/useDraggableNode';
 import { SHADOW_COLOR, SMALL_SCREEN_THEME_BREAKPOINT } from 'constants/theme';
 
@@ -79,7 +79,7 @@ export const TableCards: React.FC<TableCardProps> = ({ totalCards }) => {
 
   const tableCardsRef = useRef<HTMLDivElement | null>(null);
   const { isCursorOver, isClicked, isDragging, connectedDragSource } =
-    useDraggableNode(tableCardsRef.current, Draggable.CARD as DraggableType);
+    useDraggableNode(tableCardsRef.current, DraggableType.CARD);
 
   return (
     <>

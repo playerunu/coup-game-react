@@ -129,8 +129,8 @@ export const TablePlayer: React.FC<TablePlayerProps> = ({
         {showCoinsOnLeft && playerCoins}
         <Box>
           <Box display="grid" gridTemplateColumns="35px 1fr">
-            <CardImg src={card1Img} key={'card1Img'} alt={card1Img} />
-            <CardImg src={card2Img} key={'card2Img'} alt={card2Img} />
+            <CardImg src={card1Img} key={'card1Img'} alt={card1Img} draggable={false}/>
+            <CardImg src={card2Img} key={'card2Img'} alt={card2Img} draggable={false}/>
           </Box>
         </Box>
         {!showCoinsOnLeft && playerCoins}

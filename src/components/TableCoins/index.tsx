@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Box, Stack } from '@mui/material';
 import { useWebpImage } from 'utils/image';
 import styled from 'styled-components';
-import { Draggable, DraggableType } from 'types/DraggableType';
+import { DraggableType } from 'types/DraggableType';
 import { useDraggableNode } from 'hooks/useDraggableNode';
 import { SHADOW_COLOR, SMALL_SCREEN_THEME_BREAKPOINT } from 'constants/theme';
 
@@ -50,7 +50,7 @@ export const TableCoins: React.FC<TableCoinsProps> = ({ totalCoins }) => {
   const tableCoinsRef = useRef<HTMLDivElement | null>(null);
   const { isClicked, connectedDragSource } = useDraggableNode(
     tableCoinsRef.current,
-    Draggable.COIN as DraggableType
+    DraggableType.COIN 
   );
 
   return (

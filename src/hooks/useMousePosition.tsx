@@ -18,7 +18,9 @@ export const useMousePosition = () => {
       // TODO move this to another function
       // this is necessary to prevent the mouse position from updating while dragging
       // and dispatching duplicate updates, resulting in a flickering cursor
-      if (!isDragging) updateFromPointerEvent(ev);
+      if (!isDragging) {
+        updateFromPointerEvent(ev);
+      }
     });
 
     window.addEventListener('dragover', updateFromPointerEvent);

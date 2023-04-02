@@ -15,6 +15,7 @@ import { useWindowSize } from 'hooks/useWindowSize';
 import { CustomDragLayer } from 'components/CustomDragLayer';
 import { NoiseBackground } from 'components/NoiseBackground';
 import { CurrentActionDescription } from 'components/CurrentActionDescription';
+import { ConfirmActionPanel } from 'components/ConfirmActionPanel';
 
 export const GameTable: React.FC = () => {
   //const screenOrientation = useScreenOrientation();
@@ -135,6 +136,18 @@ export const GameTable: React.FC = () => {
           {/* 1ST PLAYER, ALWAYS THE HERO PLAYER*/}
           {heroPlayer && <TablePlayer player={heroPlayer} />}
         </Box>
+        
+        <Box
+          display="flex"
+          flex="0.1 0.1 10%"
+          flexDirection="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          {/* 1ST PLAYER, ALWAYS THE HERO PLAYER*/}
+          <ConfirmActionPanel/>
+        </Box>
+        
       </Stack>
     </>
   );
